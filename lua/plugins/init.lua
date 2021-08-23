@@ -292,4 +292,8 @@ return packer.startup(function()
          require("core.mappings").vim_fugitive()
       end,
    }
+
+   use {
+     "python/black"
+   }
 end)

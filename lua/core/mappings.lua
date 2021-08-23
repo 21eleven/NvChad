@@ -38,8 +38,8 @@ M.misc = function()
       -- empty mode is same as using :map
       map("", "j", 'v:count ? "j" : "gj"', { expr = true })
       map("", "k", 'v:count ? "k" : "gk"', { expr = true })
-      map("", "<Down>", 'v:count ? "j" : "gj"', { expr = true })
-      map("", "<Up>", 'v:count ? "k" : "gk"', { expr = true })
+      -- map("", "<Down>", 'v:count ? "j" : "gj"', { expr = true })
+      -- map("", "<Up>", 'v:count ? "k" : "gk"', { expr = true })
 
       -- use ESC to turn off search highlighting
       map("n", "<Esc>", ":noh <CR>", opt)
@@ -113,6 +113,34 @@ M.misc = function()
    non_config_mappings()
    optional_mappings()
    required_mappings()
+
+   -- personal mappings
+   map('n', '<left>', '0', opt)
+   map('n', '<right>', '$', opt)
+   map('n', '<up>', 'kkkkkkk', opt)
+   map('n', '<down>', 'jjjjjjj', opt)
+   map('n', '<leader>nh', '<esc>:', opt)
+   map('n', '<leader>nn', '<esc>/', opt)
+   map('n', '<leader>w', ':w!<cr>', opt)
+   map('n', '<leader><leader>w', ':wq!<cr>', opt)
+   map('n', '<leader>q', ':qa!<cr>', opt)
+   -- map('n', '<leader><leader>e', ':q!<cr>', opt)
+
+   map('n', '<leader>j', ':BufferLineCyclePrev<CR>', opt)
+   map('n', '<leader>k', ':BufferLineCycleNext<CR>', opt)
+   map('n', '<leader>h', '<C-w>h<CR>0', opt)
+   -- map('n', '<leader>hh', '<C-w>h<CR>0', opt)
+   map('n', '<leader>l', '<C-w>l<CR>0', opt)
+   -- map('n', '<leader>t', ':BufferPick<CR>', opt)
+   map('n', 'tt', ':BufferLinePick<CR>', opt)
+   map('n', '<leader>e', ":lua require('utils').close_buffer() <CR>", opt)
+   map('n', '<leader><leader>e', ":bdelete!", opt)
+   map("n", "<leader>gd", ':Gdiffsplit', opt)
+   map('n', '<leader>gw', ':Gw<cr>', opt)
+   map('n', '<leader>gg', ':Gw<cr><esc>:sleep 100m<cr><esc>:Git commit<cr>', opt)
+   map('n', '<leader>gc', ':Git commit<cr>', opt)
+   map('n', '<leader>gs', ':! git status<cr>', opt)
+   map('n', '<leader>gd', ':Gdiffsplit<cr>', opt)
 end
 
 -- below are all plugin related mappinsg
@@ -176,6 +204,9 @@ M.telescope = function()
    map("n", m.live_grep, ":Telescope live_grep <CR>", opt)
    map("n", m.oldfiles, ":Telescope oldfiles <CR>", opt)
    map("n", m.themes, ":Telescope themes <CR>", opt)
+   -- personal
+   map("n", m.commands, ":Telescope commands<CR>", opt)
+   map("n", m.command_history, ":Telescope command_history<CR>", opt)
 end
 
 M.telescope_media = function()
@@ -199,6 +230,8 @@ M.vim_fugitive = function()
    map("n", m.git_blame, ":Git blame <CR>", opt)
    map("n", m.diff_get_2, ":diffget //2 <CR>", opt)
    map("n", m.diff_get_3, ":diffget //3 <CR>", opt)
+   -- map('n', '<leader>gb', ':G blame<cr>', opt)
+   -- map('n', '<leader>gl', ':LazyGit<cr>', opt)
 end
 
 return M

@@ -4,7 +4,7 @@ local M = {}
 
 -- non plugin ui configs, available without any plugins
 M.ui = {
-   italic_comments = false,
+   italic_comments = true,
 
    -- theme to be used, to see all available themes, open the theme switcher by <leader> + th
    theme = "onedark",
@@ -125,9 +125,9 @@ M.mappings = {
       -- show hidden terminal buffers in a telescope picker
       pick_term = "<leader>W",
       -- below three are for spawning terminals
-      new_horizontal = "<leader>h",
-      new_vertical = "<leader>v",
-      new_window = "<leader>w",
+      new_wind = "<leader>t",
+      new_vert = "<leader><leader>v",
+      new_hori = "<leader><leader>h",
    },
 
    -- update nvchad from nvchad, chadness 101
@@ -152,8 +152,8 @@ M.mappings.plugin = {
       bookmarks = "<leader>bm",
       new_file = "<leader>fn", -- basically create a new buffer
       open = "<leader>db", -- open dashboard
-      session_load = "<leader>l", -- load a saved session
-      session_save = "<leader>s", -- save a session
+      session_load = "<leader><leader>l", -- load a saved session
+      session_save = "<leader><leader>s", -- save a session
    },
    -- note: this is an edditional mapping to escape, escape key will still work
    better_escape = {
@@ -171,9 +171,11 @@ M.mappings.plugin = {
       git_commits = "<leader>cm",
       git_status = "<leader>gt",
       help_tags = "<leader>fh",
-      live_grep = "<leader>fw",
+      live_grep = "<leader>fg",
       oldfiles = "<leader>fo",
       themes = "<leader>th",
+      commands = "<leader>fc",
+      command_history = "<leader>fh",
    },
    telescope_media = {
       media_files = "<leader>fp",

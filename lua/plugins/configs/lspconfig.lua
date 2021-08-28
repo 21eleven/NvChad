@@ -74,30 +74,30 @@ local function setup_servers()
             -- root_dir = vim.loop.cwd,
          }
       elseif lang == "rust" then
-        lspconfig[lang].setup {
-          -- https://users.rust-lang.org/t/setup-neovim-0-5-for-rust/60183/4
-          on_attach = on_attach,
-          settings = {
-            ["rust-analyzer"] = {
-              -- assist = {
-              --   importMergeBehavior = "last",
-              --   importPrefix = "by_self",
-              -- },
-              -- diagnostics = {
-              --   disabled = { "unresolved-import" }
-              -- },
-              -- cargo = {
-              --     loadOutDirsFromCheck = true
-              -- },
-              -- procMacro = {
-              --     enable = true
-              -- },
-              checkOnSave = {
-                  command = "clippy"
-              },
-            }
-          }
-        }
+         lspconfig[lang].setup {
+            -- https://users.rust-lang.org/t/setup-neovim-0-5-for-rust/60183/4
+            on_attach = on_attach,
+            settings = {
+               ["rust-analyzer"] = {
+                  -- assist = {
+                  --   importMergeBehavior = "last",
+                  --   importPrefix = "by_self",
+                  -- },
+                  -- diagnostics = {
+                  --   disabled = { "unresolved-import" }
+                  -- },
+                  -- cargo = {
+                  --     loadOutDirsFromCheck = true
+                  -- },
+                  -- procMacro = {
+                  --     enable = true
+                  -- },
+                  checkOnSave = {
+                     command = "clippy",
+                  },
+               },
+            },
+         }
       elseif lang == "lua" then
          lspconfig[lang].setup {
             on_attach = on_attach,

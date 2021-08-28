@@ -352,6 +352,6 @@ return packer.startup(function()
    }
 
    use {
-     "python/black"
+      "python/black",
    }
 end)

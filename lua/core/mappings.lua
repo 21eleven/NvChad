@@ -147,7 +147,7 @@ M.misc = function()
    user_config_mappings()
 end
 
--- below are all plugin related mappinsg
+-- below are all plugin related mappings
 
 M.better_escape = function()
    vim.g.better_escape_shortcut = plugin_maps.better_escape.esc_insertmode or { "" }
@@ -158,6 +158,10 @@ M.bufferline = function()
 
    map("n", m.next_buffer, ":BufferLineCycleNext <CR>")
    map("n", m.prev_buffer, ":BufferLineCyclePrev <CR>")
+   map("n", m.moveLeft, "<C-w>h")
+   map("n", m.moveRight, "<C-w>l")
+   map("n", m.moveUp, "<C-w>k")
+   map("n", m.moveDown, "<C-w>j")
 end
 
 M.chadsheet = function()

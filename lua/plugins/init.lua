@@ -355,7 +355,7 @@ return packer.startup(function()
       "python/black",
    }
 
-  use {
-      "rhysd/clever-f.vim"
-  }
+   use {
+      "rhysd/clever-f.vim",
+   }
 end)

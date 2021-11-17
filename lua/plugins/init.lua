@@ -284,8 +284,10 @@ return packer.startup(function()
       disable = not plugin_status.vim_fugitive,
       cmd = {
          "Git",
+         "Gdiff",
          "Gdiffsplit",
-         "Gcommit",
+         "Gvdiffsplit",
+         "Gwrite",
          "Gw",
       },
       setup = function()

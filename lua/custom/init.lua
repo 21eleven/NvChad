@@ -107,9 +107,13 @@ hooks.add("install_plugins", function(use)
    --   "averms/black-nvim"
    -- }
 
-   -- use {
-   --     "rhysd/clever-f.vim"
-   -- }
+  -- use {
+  --     "rhysd/clever-f.vim"
+  -- }
+  --
+  use {
+    "Pocco81/TrueZen.nvim",
+  }
 
    use {
       "nvie/vim-flake8",

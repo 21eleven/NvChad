@@ -145,7 +145,6 @@ M.misc = function()
    map('n', '<leader>gc', ':Git commit<cr>')
    map('n', '<leader>gs', ':! git status<cr>')
    map('n', '<leader>gd', ':Gdiffsplit<cr>')
-   user_config_mappings()
 end
 
 -- below are all plugin related mappings

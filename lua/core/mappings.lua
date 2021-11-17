@@ -21,11 +21,10 @@ M.misc = function()
       -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
       -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
       -- empty mode is same as using :map
-      -- also don't use g[j|k] when in operator pending mode, so it doesn't alter d, y or c behaviour
-      map("", "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
-      map("", "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
-      map("", "<Down>", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
-      map("", "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
+      map("", "j", 'v:count ? "j" : "gj"', { expr = true })
+      map("", "k", 'v:count ? "k" : "gk"', { expr = true })
+      -- map("", "<Down>", 'v:count ? "j" : "gj"', { expr = true })
+      -- map("", "<Up>", 'v:count ? "k" : "gk"', { expr = true })
 
       -- use ESC to turn off search highlighting
       map("n", "<Esc>", ":noh <CR>")
@@ -117,6 +116,34 @@ M.misc = function()
    optional_mappings()
    required_mappings()
    hooks.run("setup_mappings", map)
+
+   -- personal mappings
+   map('n', '<left>', '0', opt)
+   map('n', '<right>', '$', opt)
+   map('n', '<up>', 'kkkkkkk', opt)
+   map('n', '<down>', 'jjjjjjj', opt)
+   map('n', '<leader>nh', '<esc>:', opt)
+   map('n', '<leader>nn', '<esc>/', opt)
+   map('n', '<leader>w', ':w!<cr>', opt)
+   map('n', '<leader><leader>w', ':wq!<cr>', opt)
+   map('n', '<leader>q', ':qa!<cr>', opt)
+   -- map('n', '<leader><leader>e', ':q!<cr>', opt)
+
+   map('n', '<leader>j', ':BufferLineCyclePrev<CR>', opt)
+   map('n', '<leader>k', ':BufferLineCycleNext<CR>', opt)
+   map('n', '<leader>h', '<C-w>h<CR>0', opt)
+   -- map('n', '<leader>hh', '<C-w>h<CR>0', opt)
+   map('n', '<leader>l', '<C-w>l<CR>0', opt)
+   -- map('n', '<leader>t', ':BufferPick<CR>', opt)
+   map('n', 'tt', ':BufferLinePick<CR>', opt)
+   map('n', '<leader>e', ":lua require('utils').close_buffer() <CR>", opt)
+   map('n', '<leader><leader>e', ":bdelete!", opt)
+   map("n", "<leader>gd", ':Gdiffsplit', opt)
+   map('n', '<leader>gw', ':Gw<cr>', opt)
+   map('n', '<leader>gg', ':Gw<cr><esc>:sleep 100m<cr><esc>:Git commit<cr>', opt)
+   map('n', '<leader>gc', ':Git commit<cr>', opt)
+   map('n', '<leader>gs', ':! git status<cr>', opt)
+   map('n', '<leader>gd', ':Gdiffsplit<cr>', opt)
 end
 
 -- below are all plugin related mappings
@@ -152,21 +179,42 @@ end
 M.telescope = function()
    local m = plugin_maps.telescope
 
-   map("n", m.buffers, ":Telescope buffers <CR>")
-   map("n", m.find_files, ":Telescope find_files <CR>")
-   map("n", m.find_hiddenfiles, ":Telescope find_files hidden=true <CR>")
-   map("n", m.git_commits, ":Telescope git_commits <CR>")
-   map("n", m.git_status, ":Telescope git_status <CR>")
-   map("n", m.help_tags, ":Telescope help_tags <CR>")
-   map("n", m.live_grep, ":Telescope live_grep <CR>")
-   map("n", m.oldfiles, ":Telescope oldfiles <CR>")
-   map("n", m.themes, ":Telescope themes <CR>")
+   map("n", m.buffers, ":Telescope buffers <CR>", opt)
+   map("n", m.find_files, ":Telescope find_files <CR>", opt)
+   map("n", m.git_commits, ":Telescope git_commits <CR>", opt)
+   map("n", m.git_status, ":Telescope git_status <CR>", opt)
+   map("n", m.help_tags, ":Telescope help_tags <CR>", opt)
+   map("n", m.live_grep, ":Telescope live_grep <CR>", opt)
+   map("n", m.oldfiles, ":Telescope oldfiles <CR>", opt)
+   map("n", m.themes, ":Telescope themes <CR>", opt)
+   -- personal
+   -- map("n", m.commands, ":Telescope commands<CR>", opt)
+   -- map("n", m.command_history, ":Telescope command_history<CR>", opt)
 end
 
 M.telescope_media = function()
    local m = plugin_maps.telescope.telescope_media
 
-   map("n", m.media_files, ":Telescope media_files <CR>")
+   map("n", m.media_files, ":Telescope media_files <CR>", opt)
+end
+
+-- M.truezen = function()
+--    local m = plugin_maps.truezen
+-- 
+--    map("n", m.ataraxis_mode, ":TZAtaraxis <CR>", opt)
+--    map("n", m.focus_mode, ":TZFocus <CR>", opt)
+--    map("n", m.minimalistic_mode, ":TZMinimalist <CR>", opt)
+-- end
+
+M.vim_fugitive = function()
+   local m = plugin_maps.vim_fugitive
+
+   map("n", m.git, ":Git <CR>", opt)
+   map("n", m.git_blame, ":Git blame <CR>", opt)
+   map("n", m.diff_get_2, ":diffget //2 <CR>", opt)
+   map("n", m.diff_get_3, ":diffget //3 <CR>", opt)
+   -- map('n', '<leader>gb', ':G blame<cr>', opt)
+   -- map('n', '<leader>gl', ':LazyGit<cr>', opt)
 end
 
 return M

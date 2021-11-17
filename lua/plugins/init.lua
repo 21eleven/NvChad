@@ -263,4 +263,33 @@ return packer.startup(function()
    }
 
    require("core.hooks").run("install_plugins", use)
+   use {
+      "Pocco81/TrueZen.nvim",
+      disable = not plugin_status.truezen,
+      cmd = {
+         "TZAtaraxis",
+         "TZMinimalist",
+         "TZFocus",
+      },
+      config = function()
+         require "plugins.configs.zenmode"
+      end,
+      setup = function()
+         require("core.mappings").truezen()
+      end,
+   }
+
+   use {
+      "tpope/vim-fugitive",
+      disable = not plugin_status.vim_fugitive,
+      cmd = {
+         "Git",
+         "Gdiffsplit",
+         "Gcommit",
+         "Gw",
+      },
+      setup = function()
+         require("core.mappings").vim_fugitive()
+      end,
+   }
 end)

@@ -2,6 +2,7 @@
 -- This file is for NvChad options & tools, custom settings are split between here and 'lua/custom/init.lua'
 local utils = require "core.utils"
 
+
 local map = utils.map
 
 local M = {}
@@ -21,21 +22,22 @@ M.options, M.ui, M.mappings, M.plugins = {}, {}, {}, {}
 -- M.ui = {
 --   theme = "nord"
 -- }
-M.mappings = {}
+M.mappings = {
+}
 -- NvChad included plugin options & overrides
 M.plugins = {
    options = {
-      nvimtree = {
-         update_cwd = false,
-         update_focused_file = {},
-      },
+     nvimtree = {
+       update_cwd = false,
+       update_focused_file = {},
+     }
       --   lspconfig = {
       --    path of file containing setups of different lsps (ex : "custom.plugins.lspconfig"), read the docs for more info
       --    setup_lspconf = "",
       --   },
    },
    status = {
-      dashboard = false,
+     dashboard = false,
    },
    -- To change the Packer `config` of a plugin that comes with NvChad,
    -- add a table entry below matching the plugin github name

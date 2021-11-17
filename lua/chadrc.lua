@@ -125,13 +125,13 @@ M.mappings = {
       -- show hidden terminal buffers in a telescope picker
       pick_term = "<leader>W",
       -- below three are for spawning terminals
-      new_wind = "<leader><leader>t",
+      new_wind = "<leader>t",
       new_vert = "<leader><leader>v",
       new_hori = "<leader><leader>h",
    },
 
    -- update nvchad from nvchad, chadness 101
-   update_nvchad = "<leader>u$",
+   update_nvchad = "<leader>uu",
 }
 
 -- all plugins related mappings
@@ -170,7 +170,7 @@ M.mappings.plugin = {
       find_files = "<leader>ff",
       git_commits = "<leader>cm",
       git_status = "<leader>gt",
-      help_tags = "<leader>ft",
+      help_tags = "<leader>fh",
       live_grep = "<leader>fg",
       oldfiles = "<leader>fo",
       themes = "<leader>th",
@@ -188,12 +188,9 @@ M.mappings.plugin = {
    vim_fugitive = {
       diff_get_2 = "<leader>gh",
       diff_get_3 = "<leader>gl",
-      git = "<leader>gi",
+      git = "<leader>gs",
       git_blame = "<leader>gb",
    },
 }
-
--- vim.g['black_linelength'] = 88
-vim.cmd "autocmd BufWritePre *py execute ':Black'"
 
 return M

@@ -1,11 +1,10 @@
 -- IMPORTANT NOTE : This is the user config, can be edited. Will be preserved if updated with internal updater
 
 local M = {}
-M.ui, M.options, M.plugin_status, M.mappings, M.custom = {}, {}, {}, {}, {}
 
 -- non plugin ui configs, available without any plugins
 M.ui = {
-   italic_comments = false,
+   italic_comments = true,
 
    -- theme to be used, to see all available themes, open the theme switcher by <leader> + th
    theme = "onedark",
@@ -41,8 +40,6 @@ M.ui.plugin = {
 M.options = {
    clipboard = "unnamedplus",
    cmdheight = 1,
-   copy_cut = true, -- copy cut text ( x key ), visual and normal mode
-   copy_del = true, -- copy deleted text ( dd key ), visual and normal mode
    expandtab = true,
    hidden = true,
    ignorecase = true,
@@ -82,7 +79,7 @@ M.plugin_status = {
    comment = true, -- universal commentor
    dashboard = true, -- a nice looking dashboard
    esc_insertmode = true, -- escape from insert mode using custom keys
-   feline = true, -- statusline
+   galaxyline = true, -- statusline
    gitsigns = true, -- gitsigns in statusline
    lspkind = true, -- lsp enhancements
    lspsignature = true, -- lsp enhancements
@@ -128,13 +125,13 @@ M.mappings = {
       -- show hidden terminal buffers in a telescope picker
       pick_term = "<leader>W",
       -- below three are for spawning terminals
-      new_horizontal = "<leader>h",
-      new_vertical = "<leader>v",
-      new_window = "<leader>w",
+      new_wind = "<leader><leader>t",
+      new_vert = "<leader><leader>v",
+      new_hori = "<leader><leader>h",
    },
 
    -- update nvchad from nvchad, chadness 101
-   update_nvchad = "<leader>uu",
+   update_nvchad = "<leader>u$",
 }
 
 -- all plugins related mappings
@@ -155,8 +152,8 @@ M.mappings.plugin = {
       bookmarks = "<leader>bm",
       new_file = "<leader>fn", -- basically create a new buffer
       open = "<leader>db", -- open dashboard
-      session_load = "<leader>l", -- load a saved session
-      session_save = "<leader>s", -- save a session
+      session_load = "<leader><leader>l", -- load a saved session
+      session_save = "<leader><leader>s", -- save a session
    },
    -- note: this is an edditional mapping to escape, escape key will still work
    better_escape = {
@@ -173,10 +170,12 @@ M.mappings.plugin = {
       find_files = "<leader>ff",
       git_commits = "<leader>cm",
       git_status = "<leader>gt",
-      help_tags = "<leader>fh",
-      live_grep = "<leader>fw",
+      help_tags = "<leader>ft",
+      live_grep = "<leader>fg",
       oldfiles = "<leader>fo",
       themes = "<leader>th",
+      commands = "<leader>fc",
+      command_history = "<leader>fh",
    },
    telescope_media = {
       media_files = "<leader>fp",
@@ -189,25 +188,12 @@ M.mappings.plugin = {
    vim_fugitive = {
       diff_get_2 = "<leader>gh",
       diff_get_3 = "<leader>gl",
-      git = "<leader>gs",
+      git = "<leader>gi",
       git_blame = "<leader>gb",
    },
 }
 
--- user custom mappings
--- e.g: name = { "mode" , "keys" , "cmd" , "options"}
--- name: can be empty or something unique with repect to other custom mappings
---    { mode, key, cmd } or name = { mode, key, cmd }
--- mode: usage: mode or { mode1, mode2 }, multiple modes allowed, available modes => :h map-modes,
--- keys: multiple keys allowed, same synxtax as modes
--- cmd:  for vim commands, must use ':' at start and add <CR> at the end if want to execute
--- options: see :h nvim_set_keymap() opts section
-M.custom.mappings = {
-   -- clear_all = {
-   --    "n",
-   --    "<leader>cc",
-   --    "gg0vG$d",
-   -- },
-}
+-- vim.g['black_linelength'] = 88
+vim.cmd "autocmd BufWritePre *py execute ':Black'"
 
 return M

@@ -1,10 +1,12 @@
 local utils = require "core.utils"
+local hooks = require "core.hooks"
 
 local config = utils.load_config()
 local map = utils.map
 
 local maps = config.mappings
-local plugin_maps = maps.plugin
+local plugin_maps = maps.plugins
+local nvChad_options = config.options.nvChad
 
 local cmd = vim.cmd
 
@@ -19,11 +21,10 @@ M.misc = function()
       -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
       -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
       -- empty mode is same as using :map
-      -- also don't use g[j|k] when in operator pending mode, so it doesn't alter d, y or c behaviour
-      map("", "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
-      map("", "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
-      map("", "<Down>", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
-      map("", "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
+      map("", "j", 'v:count ? "j" : "gj"', { expr = true })
+      map("", "k", 'v:count ? "k" : "gk"', { expr = true })
+      -- map("", "<Down>", 'v:count ? "j" : "gj"', { expr = true })
+      -- map("", "<Up>", 'v:count ? "k" : "gk"', { expr = true })
 
       -- use ESC to turn off search highlighting
       map("n", "<Esc>", ":noh <CR>")
@@ -31,17 +32,17 @@ M.misc = function()
 
    local function optional_mappings()
       -- don't yank text on cut ( x )
-      if not config.options.copy_cut then
+      if not nvChad_options.copy_cut then
          map({ "n", "v" }, "x", '"_x')
       end
 
       -- don't yank text on delete ( dd )
-      if not config.options.copy_del then
-         map({ "n", "v" }, "dd", '"_dd')
+      if not nvChad_options.copy_del then
+         map({ "n", "v" }, "d", '"_d')
       end
 
       -- navigation within insert mode
-      if config.options.insert_nav then
+      if nvChad_options.insert_nav then
          local inav = maps.insert_nav
 
          map("i", inav.backward, "<Left>")
@@ -49,15 +50,25 @@ M.misc = function()
          map("i", inav.forward, "<Right>")
          map("i", inav.next_line, "<Up>")
          map("i", inav.prev_line, "<Down>")
-         map("i", inav.top_of_line, "<ESC>^i")
+         map("i", inav.beginning_of_line, "<ESC>^i")
+      end
+
+      -- easier navigation between windows
+      if nvChad_options.window_nav then
+         local wnav = maps.window_nav
+
+         map("n", wnav.moveLeft, "<C-w>h")
+         map("n", wnav.moveRight, "<C-w>l")
+         map("n", wnav.moveUp, "<C-w>k")
+         map("n", wnav.moveDown, "<C-w>j")
       end
 
       -- check the theme toggler
-      if config.ui.theme_toggler then
+      if nvChad_options.theme_toggler then
          map(
             "n",
             maps.theme_toggler,
-            ":lua require('nvchad').toggle_theme(require('core.utils').load_config().ui.theme_toggler.fav_themes) <CR>"
+            ":lua require('nvchad').toggle_theme(require('core.utils').load_config().ui.theme_toggler) <CR>"
          )
       end
    end
@@ -101,45 +112,48 @@ M.misc = function()
       -- cmd "silent! command! NvChadReload lua require('nvchad').reload_config()"
    end
 
-   local function user_config_mappings()
-      local custom_maps = config.custom.mappings or ""
-      if type(custom_maps) ~= "table" then
-         return
-      end
-
-      for _, map_table in pairs(custom_maps) do
-         map(unpack(map_table))
-      end
-   end
-
    non_config_mappings()
    optional_mappings()
    required_mappings()
-   user_config_mappings()
+   hooks.run("setup_mappings", map)
+
+   -- personal mappings
+   map('n', '<left>', '0')
+   map('n', '<right>', '$')
+   map('n', '<up>', 'kkkkkkk')
+   map('n', '<down>', 'jjjjjjj')
+   map('n', '<leader>nh', '<esc>: ')
+   map('n', '<leader>nn', '<esc>/')
+   map('n', '<leader>w', ':w!<cr>')
+   map('n', '<leader><leader>w', ':wq!<cr>')
+   map('n', '<leader>q', ':q<cr>')
+   map('n', '<leader><leader>q', ':qa!<cr>')
+   -- map('n', '<leader><leader>e', ':q!<cr>')
+
+   map('n', '<leader>j', ':BufferLineCyclePrev<CR>')
+   map('n', '<leader>k', ':BufferLineCycleNext<CR>')
+   map('n', '<leader>h', '<C-w>h<CR>0')
+   -- map('n', '<leader>hh', '<C-w>h<CR>0')
+   map('n', '<leader>l', '<C-w>l<CR>0')
+   -- map('n', '<leader>t', ':BufferPick<CR>')
+   map('n', 'tt', ':BufferLinePick<CR>')
+   map('n', '<leader>e', ":lua require('core/utils').close_buffer() <CR>")
+   map('n', '<leader><leader>e', ":bdelete!<CR>")
+   map("n", "<leader>gd", ':Gdiffsplit')
+   map('n', '<leader>gw', ':Gw<cr>')
+   map('n', '<leader>gg', ':Gw<cr><esc>:sleep 100m<cr><esc>:Git commit<cr>')
+   map('n', '<leader>gc', ':Git commit<cr>')
+   map('n', '<leader>gs', ':! git status<cr>')
+   map('n', '<leader>gd', ':Gdiffsplit<cr>')
 end
 
--- below are all plugin related mappinsg
-
-M.better_escape = function()
-   vim.g.better_escape_shortcut = plugin_maps.better_escape.esc_insertmode or { "" }
-end
+-- below are all plugin related mappings
 
 M.bufferline = function()
    local m = plugin_maps.bufferline
 
    map("n", m.next_buffer, ":BufferLineCycleNext <CR>")
    map("n", m.prev_buffer, ":BufferLineCyclePrev <CR>")
-end
-
-M.chadsheet = function()
-   local m = plugin_maps.chadsheet
-
-   map("n", m.default_keys, ":lua require('cheatsheet').show_cheatsheet_telescope() <CR>")
-   map(
-      "n",
-      m.user_keys,
-      ":lua require('cheatsheet').show_cheatsheet_telescope{bundled_cheatsheets = false, bundled_plugin_cheatsheets = false } <CR>"
-   )
 end
 
 M.comment = function()
@@ -163,45 +177,45 @@ M.nvimtree = function()
    map("n", plugin_maps.nvimtree.focus, ":NvimTreeFocus <CR>")
 end
 
-M.neoformat = function()
-   map("n", plugin_maps.neoformat.format, ":Neoformat <CR>")
-end
-
 M.telescope = function()
    local m = plugin_maps.telescope
 
-   map("n", m.buffers, ":Telescope buffers <CR>")
-   map("n", m.find_files, ":Telescope find_files <CR>")
-   map("n", m.find_hiddenfiles, ":Telescope find_files hidden=true <CR>")
-   map("n", m.git_commits, ":Telescope git_commits <CR>")
-   map("n", m.git_status, ":Telescope git_status <CR>")
-   map("n", m.help_tags, ":Telescope help_tags <CR>")
-   map("n", m.live_grep, ":Telescope live_grep <CR>")
-   map("n", m.oldfiles, ":Telescope oldfiles <CR>")
-   map("n", m.themes, ":Telescope themes <CR>")
+   map("n", m.buffers, ":Telescope buffers <CR>", opt)
+   map("n", m.find_files, ":Telescope find_files <CR>", opt)
+   map("n", m.git_commits, ":Telescope git_commits <CR>", opt)
+   map("n", m.git_status, ":Telescope git_status <CR>", opt)
+   map("n", m.help_tags, ":Telescope help_tags <CR>", opt)
+   map("n", m.live_grep, ":Telescope live_grep <CR>", opt)
+   map("n", m.oldfiles, ":Telescope oldfiles <CR>", opt)
+   map("n", m.themes, ":Telescope themes <CR>", opt)
+   -- personal
+   -- map("n", m.commands, ":Telescope commands<CR>", opt)
+   -- map("n", m.command_history, ":Telescope command_history<CR>", opt)
 end
 
 M.telescope_media = function()
-   local m = plugin_maps.telescope_media
+   local m = plugin_maps.telescope.telescope_media
 
-   map("n", m.media_files, ":Telescope media_files <CR>")
+   map("n", m.media_files, ":Telescope media_files <CR>", opt)
 end
 
-M.truezen = function()
-   local m = plugin_maps.truezen
-
-   map("n", m.ataraxis_mode, ":TZAtaraxis <CR>")
-   map("n", m.focus_mode, ":TZFocus <CR>")
-   map("n", m.minimalistic_mode, ":TZMinimalist <CR>")
-end
+-- M.truezen = function()
+--    local m = plugin_maps.truezen
+-- 
+--    map("n", m.ataraxis_mode, ":TZAtaraxis <CR>", opt)
+--    map("n", m.focus_mode, ":TZFocus <CR>", opt)
+--    map("n", m.minimalistic_mode, ":TZMinimalist <CR>", opt)
+-- end
 
 M.vim_fugitive = function()
    local m = plugin_maps.vim_fugitive
 
-   map("n", m.git, ":Git <CR>")
-   map("n", m.git_blame, ":Git blame <CR>")
-   map("n", m.diff_get_2, ":diffget //2 <CR>")
-   map("n", m.diff_get_3, ":diffget //3 <CR>")
+   map("n", m.git, ":Git <CR>", opt)
+   map("n", m.git_blame, ":Git blame <CR>", opt)
+   map("n", m.diff_get_2, ":diffget //2 <CR>", opt)
+   map("n", m.diff_get_3, ":diffget //3 <CR>", opt)
+   -- map('n', '<leader>gb', ':G blame<cr>', opt)
+   -- map('n', '<leader>gl', ':LazyGit<cr>', opt)
 end
 
 return M

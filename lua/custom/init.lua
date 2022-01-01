@@ -126,6 +126,9 @@ hooks.add("install_plugins", function(use)
    -- }
 end)
 
+-- vim.o.guifont = "Azeret Mono,Noto Color Emoji:h16"
+vim.o.guifont = "Azeret Mono,Hack Nerd Font Mono,Noto Color Emoji,NotoEmoji Nerd Font:h16"
+
 vim.g["isort_vim_options"] = "--profile=black --multi-line=3"
 vim.cmd "autocmd BufWritePre *py execute ':Black'"
 vim.cmd "autocmd BufWritePre *py execute ':Isort'"

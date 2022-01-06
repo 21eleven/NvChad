@@ -83,10 +83,10 @@ hooks.add("install_plugins", function(use)
          "Gw",
       },
    }
-   use {
-      "vim-scripts/SQLUtilities",
-      "vim-scripts/Align",
-   }
+   -- use {
+   --    "vim-scripts/SQLUtilities",
+   --    "vim-scripts/Align",
+   -- }
    -- use {
    --   "williamboman/nvim-lsp-installer",
    -- }
@@ -102,6 +102,14 @@ hooks.add("install_plugins", function(use)
             vim.cmd [[ do User LspAttachBuffers ]]
          end)
       end,
+   }
+   use {
+    'ggandor/lightspeed.nvim',
+
+   }
+   use {
+     "tpope/vim-repeat",
+
    }
    -- use {
    --   "averms/black-nvim"
@@ -122,7 +130,7 @@ hooks.add("install_plugins", function(use)
       "brentyi/isort.vim",
    }
    -- use {
-   --   'kabouzeid/nvim-lspinstall'
+   --   'kaboujeid/nvim-lspinstall'
    -- }
 end)
 
